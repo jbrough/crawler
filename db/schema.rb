@@ -10,14 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171123082154) do
+ActiveRecord::Schema.define(version: 20171123094216) do
 
   create_table "domain_countries", force: :cascade do |t|
     t.string "domain"
     t.string "country", limit: 2
     t.float "percentage"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["domain", "country"], name: "index_domain_countries_on_domain_and_country", unique: true
   end
 
