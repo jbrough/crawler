@@ -3,7 +3,7 @@ class FakeGet
   def initialize(html = nil)
     @html = html
   end
-  def do(url)
+  def do(id, url)
     @args ||= []
     @args << url
     @calls ||= 0

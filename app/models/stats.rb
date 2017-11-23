@@ -19,7 +19,7 @@ class Stats
   end
 
   def perform
-    parser = AlexaParser.new(@get.do(@uri))
+    parser = AlexaParser.new(@get.do(nil, @uri))
     parser.country_stats.each do |struct|
       @queue.enqueue(
         DomainCountryRepository,

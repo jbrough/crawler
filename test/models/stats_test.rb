@@ -10,7 +10,7 @@ end
 class TestStats < Minitest::Test
   def setup
     @get = FakeGet.new(file_fixture('alexa_siteinfo.html'))
-    @queue = FakeQueue.new
+    @queue = FakeQueue.new(false)
     @subj = Stats.new('http://www.foo.com', @get, @queue)
   end
 
@@ -23,14 +23,14 @@ class TestStats < Minitest::Test
       @get.args[0],
       'visits alexa url for given domain stats'
     )
-    assert_equal 5, @queue.calls, 'enqueues stats separately'
+    assert_equal 5, @queue.calls[:enqueue].length, 'enqueues stats separately'
 
     assert_equal(
       [
 				DomainCountryRepository,
         {country: 'US', percentage: 39.9, domain: 'foo.com'},
 			],
-      @queue.args[0],
+      @queue.calls[:enqueue][0],
       'adds country stat to persistence queue',
     )
   end

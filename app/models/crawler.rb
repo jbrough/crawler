@@ -28,9 +28,22 @@ class Crawler
         is_internal = i == 0
         @queue.enqueue(LinkRepository, @id, parser.domain, link, is_internal)
         if is_internal
-          @queue.enqueue(Crawler, @id, link)
+          if !is_visited
+            @queue.enqueue(Crawler, @id, link)
+          end
         end
       end
     end && true
+  end
+
+  def is_visited
+    # TODO: consider just using the URI with a TTL.
+    set = "crawl:#{@id}"
+    if @queue.redis.sismember(set, @uri.to_s)
+      true
+    else
+      @queue.redis.sadd(set, @uri.to_s)
+      false
+    end
   end
 end
