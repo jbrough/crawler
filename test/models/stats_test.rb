@@ -41,21 +41,15 @@ class TestCrawler < Minitest::Test
       @get.args[0],
       'visits alexa url for given domain stats'
     )
-    assert_equal 1, @queue.calls, 'makes calls to enqueue'
+    assert_equal 5, @queue.calls, 'enqueues stats separately'
 
     assert_equal(
       [
 				DomainCountryRepository,
-    		[
-          {country: 'US', percentage: 39.9, domain: 'foo.com'},
-          {country: 'GB', percentage: 7.5, domain: 'foo.com'},
-          {country: 'CA', percentage: 5.8, domain: 'foo.com'},
-          {country: 'DE', percentage: 5.3, domain: 'foo.com'},
-          {country: 'FR', percentage: 4.1, domain: 'foo.com'}
-				],
+        {country: 'US', percentage: 39.9, domain: 'foo.com'},
 			],
       @queue.args[0],
-      'adds country stats persistence queue',
+      'adds country stat to persistence queue',
     )
   end
 end

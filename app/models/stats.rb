@@ -20,12 +20,11 @@ class Stats
 
   def perform
     parser = AlexaParser.new(@get.do(@uri))
-    stats = parser.country_stats.map {|struct|
-      struct.to_h.merge({domain: @domain})
-    }
-
-    @queue.enqueue(
-      DomainCountryRepository, stats)
-    true
+    parser.country_stats.each do |struct|
+      @queue.enqueue(
+        DomainCountryRepository,
+        struct.to_h.merge({domain: @domain}),
+      )
+    end
   end
 end
