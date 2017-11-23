@@ -12,8 +12,6 @@ class GetURL
 
     uri_string = uri.to_s
 
-    p uri_string
-
     loop do
       uri = URI.parse(uri_string)
       req = Net::HTTP::Get.new(uri.to_s, {'User-Agent': UA})

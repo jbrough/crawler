@@ -12,7 +12,9 @@ class Stats
   def initialize(domain, get, queue)
     # guard against fully-qualified url being passed as
     # the uniq constraint is on tld.
-    @domain = PublicSuffix.parse(URI(domain).host).domain
+    #
+    host = URI(domain).host || domain
+    @domain = PublicSuffix.parse(host).domain
 
     @uri = URI(SITEINFO_URL + @domain)
     @get, @queue = get, queue
