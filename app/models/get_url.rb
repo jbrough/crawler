@@ -8,20 +8,20 @@ class GetURL
   def self.do(uri)
     t = Time.now
 
-		res = nil
-  	tries = 0
+    res = nil
+    tries = 0
 
-		uri_string = uri.to_s
+    uri_string = uri.to_s
 
-		loop do
-			uri = URI.parse(uri_string)
-    	req = Net::HTTP::Get.new(uri.to_s, {'User-Agent': UA})
-			http = Net::HTTP.new(uri.host, uri.port)
+    loop do
+      uri = URI.parse(uri_string)
+      req = Net::HTTP::Get.new(uri.to_s, {'User-Agent': UA})
+      http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = (uri.scheme == 'https')
       res = http.request(req)
 
       if res['location']
-    	  uri_string = res['location']
+        uri_string = res['location']
 
         # vice.com uses relative URIs in some Location headers.
         # This is allowed by the specification.
@@ -35,15 +35,15 @@ class GetURL
       end
 
       if !res.kind_of? Net::HTTPRedirection
-      	break
-    	end
+        break
+      end
 
-    	if tries == 10
-      	break
-    	end
+      if tries == 10
+        break
+      end
 
-    	tries += 1
-  	end
+      tries += 1
+    end
 
     msg = {
       code: res.code,
@@ -51,8 +51,8 @@ class GetURL
       msec: ((Time.now - t) * 1000.0).to_i,
       url: uri.to_s,
       redirects: tries,
-	  	redirects_exceeded: tries == 10,
-		}
+      redirects_exceeded: tries == 10,
+    }
 
     if res.code > '308'
       Logger.error(msg)
