@@ -10,7 +10,7 @@ class Stats
   end
 
   def initialize(domain, get, queue)
-    # guard against qualified domains being passed as
+    # guard against fully-qualified url being passed as
     # the uniq constraint is on tld.
     @domain = PublicSuffix.parse(URI(domain).host).domain
 

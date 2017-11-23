@@ -1,34 +1,16 @@
 require 'minitest/autorun'
 
+require './test/helpers/fake_get'
+require './test/helpers/fake_queue'
+
 def file_fixture(name)
   File.read(Rails.root.to_s + "/test/fixtures/files/#{name}")
 end
 
-class TestCrawler < Minitest::Test
+class TestStats < Minitest::Test
   def setup
-    get = Struct.new(:foo) do
-      attr_accessor :args, :calls
-      def do(url)
-        @args ||= []
-        @args << url
-        @calls ||= 0
-        @calls += 1
-        file_fixture('alexa_siteinfo.html')
-      end
-    end
-
-    queue = Struct.new(:foo) do
-      attr_accessor :args, :calls
-      def enqueue(*args)
-        @args ||= []
-        @args << args
-        @calls ||= 0
-        @calls += 1
-      end
-    end
-
-    @get = get.new(1)
-    @queue = queue.new(1)
+    @get = FakeGet.new(file_fixture('alexa_siteinfo.html'))
+    @queue = FakeQueue.new
     @subj = Stats.new('http://www.foo.com', @get, @queue)
   end
 
