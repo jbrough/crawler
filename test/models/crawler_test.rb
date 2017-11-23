@@ -15,18 +15,20 @@ class TestCrawler < Minitest::Test
   def setup
     url = 'http://bar.com'
 
-    get = Struct.new(:url) do
-      attr_accessor :calls
-      def do
+    get = Struct.new(:foo) do
+      attr_accessor :args, :calls
+      def do(url)
+        @args ||= []
+        @args << url
         @calls ||= 0
         @calls += 1
         html
       end
     end
 
-    enqueue = Struct.new(:foo) do
+    queue = Struct.new(:foo) do
       attr_accessor :args, :calls
-      def do(*args)
+      def enqueue(*args)
         @args ||= []
         @args << args
         @calls ||= 0
@@ -34,27 +36,27 @@ class TestCrawler < Minitest::Test
       end
     end
 
-    @get = get.new(url)
-    @enqueue = enqueue.new(1)
-    @subj = Crawler.new(@get, @enqueue)
+    @get = get.new(1)
+    @queue = queue.new(1)
+    @subj = Crawler.new(url, @get, @queue)
   end
 
   def test_process
 
-    @subj.process
+    @subj.perform
 
     assert_equal 1, @get.calls, 'makes http call'
-    assert_equal 5, @enqueue.calls, 'makes calls to enqueue'
+    assert_equal 6, @queue.calls, 'makes calls to enqueue'
 
     assert_equal(
       [LinkRepository, 'bar.com', 'http://bar.com/qux1', true],
-      @enqueue.args[0],
+      @queue.args[0],
       'adds internal links to persistence queue'
     )
 
     assert_equal(
-      [LinkRepository, 'bar.com', 'http://baz.com/bar', false],
-      @enqueue.args[4],
+      [LinkRepository, 'bar.com', 'http://foo.com/bar', false],
+      @queue.args[4],
       'adds external links to persistence queue'
     )
   end

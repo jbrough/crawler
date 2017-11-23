@@ -34,6 +34,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'nokogiri'
 gem 'public_suffix'
+gem 'resque'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
