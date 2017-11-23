@@ -25,6 +25,6 @@ class Stats
         DomainCountryRepository,
         struct.to_h.merge({domain: @domain}),
       )
-    end
+    end && true
   end
 end
