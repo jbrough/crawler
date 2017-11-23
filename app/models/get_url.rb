@@ -4,14 +4,15 @@ class GetURL
   Logger = Ougai::Logger.new(STDOUT)
   UA = 'Mozilla/5.0 (X11; CrOS x86_64 9901.77.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.97 Safari/537.36'
 
-  # TODO: pass in a correlation ID for logging
-  def self.do(uri)
+  def self.do(id, uri)
     t = Time.now
 
     res = nil
     tries = 0
 
     uri_string = uri.to_s
+
+    p uri_string
 
     loop do
       uri = URI.parse(uri_string)
@@ -47,6 +48,7 @@ class GetURL
 
     msg = {
       code: res.code,
+      id: id,
       method: "GET",
       msec: ((Time.now - t) * 1000.0).to_i,
       url: uri.to_s,
