@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171123094216) do
+ActiveRecord::Schema.define(version: 20171123135620) do
 
   create_table "domain_countries", force: :cascade do |t|
     t.string "domain"
@@ -26,14 +26,6 @@ ActiveRecord::Schema.define(version: 20171123094216) do
     t.boolean "internal"
     t.datetime "created_at"
     t.string "correlation_id"
-  end
-
-  create_table "websites", force: :cascade do |t|
-    t.string "domain"
-    t.integer "num_external_links"
-    t.integer "num_internal_links"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
 end
