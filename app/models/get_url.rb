@@ -22,6 +22,12 @@ class GetURL
 
       if res['location']
     	  uri_string = res['location']
+
+        # vice.com uses relative URIs in some Location headers.
+        # This is allowed by the specification.
+        #
+        # TODO: consider using a library like restclient or extracting a
+        # tried-and-tested implementation to use here.
         if uri_string[0] == '/'
           uri.path = uri_string
           uri_string = uri.to_s
