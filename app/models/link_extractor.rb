@@ -15,19 +15,32 @@ class LinkExtractor
         u.host = @uri.host
         u.scheme = @uri.scheme
         u.to_s
-      elsif PublicSuffix.parse(u.host).domain == @domain
-        u.to_s
+      else
+        domain = parse_domain(u.host)
+
+        u.to_s if domain && domain == @domain
       end
     end.compact.uniq
   end
 
   def external_links
-    uris.map {|u|
-      u.to_s if u.host && PublicSuffix.parse(u.host).domain != @domain
-    }.compact.uniq
+    uris.map do |u|
+      if u.host
+        domain = parse_domain(u.host)
+        u.to_s if domain && domain != @domain
+      end
+    end.compact.uniq
   end
 
   private
+
+  def parse_domain(host)
+    begin
+      domain = PublicSuffix.parse(host).domain
+    rescue PublicSuffix::DomainNotAllowed => e
+      return nil
+    end
+  end
 
   def uris
     @doc.css('a').map {|a| URI(a['href']) }

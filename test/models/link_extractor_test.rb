@@ -5,9 +5,11 @@ def html
   <html>
     <a href="/qux1" />
     <a href="/qux1" />
+    <a href="//bad-link" />
     <a href="https://foo.bar.com/qux2" />
     <a href="http://foo.bar.com/qux2" />
     <a href="http://foo.bar.com/qux2" />
+    <a href="http://bar.com/qux3" />
     <a href="http://foo.com/bar" />
     <a href="http://foo.com/bar" />
     <a href="http://baz.com/bar" />
@@ -29,6 +31,7 @@ class TestLinkExtractor < Minitest::Test
       'http://foo.bar.com/qux1',
       'https://foo.bar.com/qux2',
       'http://foo.bar.com/qux2',
+      'http://bar.com/qux3',
     ]
 
     assert_equal expected, subj.internal_links
