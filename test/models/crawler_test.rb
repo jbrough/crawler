@@ -15,6 +15,7 @@ class TestCrawler < Minitest::Test
   def setup
     url = 'http://bar.com'
 
+    # TODO: extract to a fakes lib as these are reused in other test
     get = Struct.new(:foo) do
       attr_accessor :args, :calls
       def do(url)
@@ -41,8 +42,7 @@ class TestCrawler < Minitest::Test
     @subj = Crawler.new(url, @get, @queue)
   end
 
-  def test_process
-
+  def test_perform
     @subj.perform
 
     assert_equal 1, @get.calls, 'makes http call'

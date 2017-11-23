@@ -1,6 +1,6 @@
 class AlexaParser
 
-  Stat = Struct.new(:country, :percent)
+  Stat = Struct.new(:country, :percentage)
 
   def initialize(html_doc)
     @doc = Nokogiri::HTML(html_doc)
@@ -15,5 +15,4 @@ class AlexaParser
       )
     end
   end
-
 end
